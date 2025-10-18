@@ -1,61 +1,66 @@
-// Задача 4. Випадковим чином генерується масив номерів робочих днів, або назв вихідних, або назв святкових днів. Підрахувати чого було більше: святкових чи вихідних.
+// Задача 4. Є продукти: Book (має author), Electronics (має warranty), Clothes (має size). Продукти можуть бути onSale або regularPrice. Створити тип ShopProduct, який об’єднує тип продукту та його статус, використовуючи & і |.
 
-enum WeekendDay  {
-    Saturday,
-    Sunday,
+type Book = {
+  type: 'Book';
+  author: string;
+};
+
+type Electronics = {
+  type: 'Electronics';
+  warranty: string;
+};
+
+type Clothes = {
+  type: 'Clothes';
+  size: string;
+};
+
+type Prices = {
+  price: 'onSale' | 'regularPrice';
+};
+
+type ShopProduct = (Book | Electronics | Clothes) & Prices;
+
+const renderShopInfo = (
+  product: string,
+  info: string,
+  price: string
+): void => {
+  document.write(`<p> Тип продукту : ${product}</p> ${info}
+      <p>Ціна : ${price}</p>
+      `);
+};
+
+const getShopInfo = (shopType: ShopProduct): void => {
+  switch (shopType.type) {
+    case 'Book':
+        renderShopInfo(
+        shopType.type,
+        `<p>Автор книги : ${shopType.author}</p>`,
+        shopType.price
+      );
+      break;
+    case 'Electronics':
+        renderShopInfo(
+        shopType.type,
+        `<p>Гарантія на  : ${shopType.warranty}</p>`,
+        shopType.price
+      );
+      break;
+    case 'Clothes':
+        renderShopInfo(
+        shopType.type,
+        `<p>Розмір : ${shopType.size}</p>`,
+        shopType.price
+      );
+      break;
+    default:
+      const _exhaustiveCheck: never = shopType;
+      throw new Error('Невідомий тип продукту');
   }
-  
-  enum HolidayName  {
-    NewYear,
-    Christmas,
-    Easter,
-    IndependenceDay,
-  }
-  
-  const getRandomNum = (min: number, max: number): number => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-  
-  const generateRandomDays = (): void => {
-    const days: string[] = [];
-    let weekendCount: number = 0;
-    let holidayCount: number = 0;
-    let workdayCount: number = 0;
-  
-    const daysCount : number = getRandomNum(3, 15);
-  
-    for (let i = 0; i < daysCount ; i++) {
-      const randomNumber: number = Math.floor(Math.random() * 11) + 1;
-  
-      if (randomNumber >= 1 && randomNumber <= 5) {
-        days.push('Working day');
-        workdayCount += 1;
-      } else if (randomNumber === 6) {
-        days.push(WeekendDay [WeekendDay .Saturday]);
-        weekendCount += 1;
-      } else if (randomNumber === 7) {
-        days.push(WeekendDay [WeekendDay .Sunday]);
-        weekendCount += 1;
-      } else if (randomNumber === 8) {
-        days.push(HolidayName [HolidayName .Christmas]);
-        holidayCount += 1;
-      } else if (randomNumber === 9) {
-        days.push(HolidayName [HolidayName .NewYear]);
-        holidayCount += 1;
-      } else if (randomNumber === 10) {
-        days.push(HolidayName [HolidayName .Easter]);
-        holidayCount += 1;
-      } else if (randomNumber === 11) {
-        days.push(HolidayName [HolidayName .IndependenceDay]);
-        holidayCount += 1;
-      }
-    }
-  
-    document.write(`<p>Random days: <span>${days.join(', ')}</span></p>`);
-    document.write(`<p>Working days: <span>${workdayCount}</span></p>`);
-    document.write(`<p>Weekend days: <span>${weekendCount}</span></p>`);
-    document.write(`<p>Holidays: <span>${holidayCount}</span></p>`);
-  };
-  
-  generateRandomDays();
-  
+};
+getShopInfo({
+  type: 'Electronics',
+  warranty: '2 years',
+  price: 'regularPrice',
+});

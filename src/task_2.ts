@@ -1,22 +1,57 @@
-// Задача 2. Створити функцію, яка дозволяє знайти або останню цифру числа, або останній символ числа.
+// Задача 2. Створіть union-тип для трьох типів : car (модель, власник), bus (компанія, кількість місць), airplane (швидкість, тип палива). Створити функцію, яка приймає параметр цього типу і виводить повну інформацію про об'єкт
 
-const getError = (message: string): never => {
-  throw new Error(message);
+type Car = {
+  type: 'Car';
+  model: string;
+  owner: string;
 };
 
-function getLastValue(val: number): number;
-function getLastValue(val: string): string;
+type Bus = {
+  type: 'Bus';
+  company: string;
+  seatingCapacity: number;
+};
 
-function getLastValue(val: number | string): number | string {
-  if (typeof val === 'number') return Math.abs(val % 10);
-  else if (typeof val === 'string') return val[val.length - 1];
-  else {
-    return getError('Невідомий тип');
+type Airplane = {
+  type: 'Airplane';
+  speed: number;
+  fuelType: string;
+};
+
+type Transport = Car | Bus | Airplane;
+
+const renderTransportInfo = (info: string, type: string): void => {
+  document.write(`
+        <p><b>Тип транспорту:</b> ${type}</p>
+        <p>${info}</p>
+    `);
+};
+
+const getTransportInfo = (transport: Transport): void => {
+  switch (transport.type) {
+    case 'Car':
+      renderTransportInfo(
+        `Модель: ${transport.model}<br>Власник: ${transport.owner}`,
+        transport.type
+      );
+      break;
+    case 'Bus':
+      renderTransportInfo(
+        `Компанія: ${transport.company}<br>Кількість місць: ${transport.seatingCapacity}`,
+        transport.type
+      );
+      break;
+
+    case 'Airplane':
+      renderTransportInfo(
+        `Швидкість: ${transport.speed} км/год<br>Тип палива: ${transport.fuelType}`,
+        transport.type
+      );
+      break;
+    default:
+      const _exhaustiveCheck: never = transport;
+      throw new Error('Невідомий тип транспорту');
   }
-}
+};
 
-const numberVal: number = 654577;
-const stringVal: string = "8655455";
-
-document.write(`<p>${getLastValue(numberVal)} : Number</p>`);
-document.write(`<p>${getLastValue(stringVal)} : String</p>`);
+getTransportInfo({ type: 'Car', model: 'Toyota', owner: 'John' });

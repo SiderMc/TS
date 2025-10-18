@@ -1,59 +1,56 @@
-// Задача 7. Згенерувати масив нагород (золота, срібна, бронзова медалі та грамота). Підрахувати кількість кожної з нагород. Використати enum. Можете і never якось застосувати
+// Задача 7. Описати тип «журнал учня» (3 поля-масиви з оцінками ). Потім на основі цього типу створити тип «менеджер оцінок» (додати методи знаходження середньої оцінки і найбільшої оцінки)
 
-enum Rewards {
-  Gold = 'Золота медаль',
-  Silver = 'Срібна медаль',
-  Bronze = 'Бронзова медаль',
-  Certificate = 'Грамота',
+type StudentJournal = {
+  math: number[];
+  english: number[];
+  literature: number[];
+};
+interface GradeManager extends StudentJournal {
+  getAverage(subject: keyof StudentJournal): number | null;
+  getMax(subject: keyof StudentJournal): number | null;
+  addGrades(subject: keyof StudentJournal, grades: number[]): void;
 }
 
-const rewardError   = (message: string): never => {
-  throw new Error(message);
+const studentGrade: GradeManager = {
+  math: [],
+  english: [],
+  literature: [],
+
+  addGrades(subject, grades) {
+    this[subject].push(...grades);
+  },
+
+  getAverage(subject) {
+    const grades = this[subject];
+    if (grades.length === 0) return null;
+    const sum = grades.reduce((acc, item) => acc + item, 0);
+    return sum / grades.length;
+  },
+
+  getMax(subject) {
+    const grades = this[subject];
+    if (grades.length === 0) return null;
+    return Math.max(...grades);
+  },
 };
 
-const getRandomNumber = (min: number, max: number): number|never => {
-  if (typeof min !== 'number' || typeof max !== 'number')
-    rewardError  ('Невірний тип');
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+
+
+studentGrade.addGrades("math",[5,9,8,11,10])
+studentGrade.addGrades("english",[7,12,10,9])
+studentGrade.addGrades("literature",[7,10,4,10,9])
+
+
+
+const renderJournal = () => {
+document.write(
+    `<p>Cередній бал з математики : ${studentGrade.getAverage("math")}</p>
+    <p>Найвищий  бал з математики : ${studentGrade.getMax("math")}</p>
+    <p>Cередній бал з англійської : ${studentGrade.getAverage("english")}</p>
+    <p>Найвищий  бал з англійської : ${studentGrade.getMax("english")}</p>
+      <p>Cередній бал з літератури : ${studentGrade.getAverage("literature",)}</p>
+    <p>Найвищий  бал з літератури : ${studentGrade.getMax("literature")}</p>
+    `
+)
 };
-
-const generateRewards = (): void => {
-  const allRewards: string[] = [];
-  let goldMedalsCount: number = 0;
-  let silverMedalsCount: number = 0;
-  let bronzeMedalsCount: number = 0;
-  let certificateCount: number = 0;
-
-  const value: number = getRandomNumber(5, 15);
-
-  for (let i: number = 0; i < value; i++) {
-    const randomNumber: number = Math.floor(Math.random() * 4) + 1;
-
-    switch (randomNumber) {
-      case 1:
-        allRewards.push(Rewards.Gold);
-        goldMedalsCount += 1;
-        break;
-      case 2:
-        allRewards.push(Rewards.Silver);
-        silverMedalsCount += 1;
-        break;
-      case 3:
-        allRewards.push(Rewards.Bronze);
-        bronzeMedalsCount += 1;
-        break;
-      case 4:
-        allRewards.push(Rewards.Certificate);
-        certificateCount += 1;
-        break;
-        default: rewardError  ("Інших нагород не знайдено !")
-    }
-  }
-  document.write(`<p>All rewards: <span>${allRewards.join(', ')}</span></p>`);
-  document.write(`<p>Золотих медалей: <span>${goldMedalsCount}</span></p>`);
-  document.write(`<p>Срібних медалей: <span>${silverMedalsCount}</span></p>`);
-  document.write(`<p>Бронзових: <span>${bronzeMedalsCount}</span></p>`);
-  document.write(`<p>Грамот: <span>${certificateCount}</span></p>`);
-};
-
-generateRewards();
+renderJournal();
