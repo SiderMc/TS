@@ -1,36 +1,25 @@
-// Задача 1. Вводиться перший номер  місяця якоїсь пори року (3,6,9,12). Визначити пору року. Передбачити перевірку і генерувати помилку якщо некоректний місяць (1-12) і генерувати помилку якщо це не перший місяць пори року. Використати never.
+// Задача 1. Створити два інтерфейс студента (піб, курс, факультет). На основі цього інтерфейсу створити інтерфейс старости (додати поле з номером групи)
 
-enum  Season {
-    Spring = "Весна",
-    Summer = "Літо",
-    Autumn = "Осінь",
-    Winter = "Зима"
+interface IStudent {
+  fullName: string;
+  course: number;
+  faculty: string;
+}
+interface IHeadStudent extends IStudent {
+  groupNumber: string;
 }
 
+const headStudent: IHeadStudent = {
+  fullName: 'John Smith',
+  course: 2,
+  faculty: 'Computer Science',
+  groupNumber: 'CS-21',
+};
 
-const monthInput:number = Number(prompt("Ввести перший місяць пори року (3/6/9/12)"))|| 3
-
-const seasonError = (message:string):never=>{
-    throw new Error(message)
-}
-
-const getSeason =(month:number):void=>{
-    if (month < 1 || month > 12) seasonError("Некоректний номер місяця! Має бути від 1 до 12.");
-    switch (month) {
-        case 3:
-          document.write(`<p>${Season.Spring}</p>`)
-          break
-        case 6:
-          document.write(`<p>${Season.Summer}</p>`)
-            break
-        case 9:
-            document.write(`<p>${Season.Autumn}</p>`)
-            break
-        case 12:
-            document.write(`<p>${Season.Winter}</p>`)
-          break 
-        default:
-          seasonError("Це не перший місяць жодної пори року!");
-      }
-}
-getSeason(monthInput)
+document.write(
+  `<p>Староста групи : ${headStudent.fullName}</p>
+   <p>Курс : ${headStudent.course}</p>
+   <p>Факультет : ${headStudent.faculty}</p>
+   <p>Номер групи  : ${headStudent.groupNumber}</p>
+  `
+);

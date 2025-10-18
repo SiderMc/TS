@@ -1,26 +1,27 @@
 "use strict";
-// Задача 5. Дано набір налаштувань (ключ-значення(enabled/disabled)). Вивести ті, які є увімкненими
-var UserSettings;
-(function (UserSettings) {
-    UserSettings["Music"] = "enable";
-    UserSettings["Sound"] = "disable";
-    UserSettings["Notifications"] = "enable";
-    UserSettings["DarkMode"] = "enable";
-    UserSettings["AutoUpdate"] = "disable";
-    UserSettings["Location"] = "enable";
-    UserSettings["VoiceControl"] = "disable";
-})(UserSettings || (UserSettings = {}));
-const getEnabledSettings = () => {
-    const enableSettings = [];
-    const settings = Object.entries(UserSettings);
-    settings.forEach(([key, value]) => {
-        if (value === 'enable')
-            enableSettings.push(key);
-    });
-    return enableSettings;
+// Задача 5.  У localStorage зберігається об’єкт у форматі JSON. Проаналізувати чи є цей об'єкт  типу Product{     title:string,     price:number }
+let product = {
+    title: 'Phone',
+    price: 200,
 };
-const renderEnabledSettings = () => {
-    const enableSettings = getEnabledSettings();
-    document.write(`<p>Налаштування які підключені: <span>${enableSettings.join(', ')}</span></p>`);
+localStorage.setItem('product', JSON.stringify(product));
+const isProduct = (data) => {
+    return (!!data && typeof data === 'object' && 'title' in data && 'price' in data);
 };
-renderEnabledSettings();
+const getProduct = () => {
+    const dataStorage = localStorage.getItem('product');
+    if (!dataStorage)
+        return null;
+    const parsedData = JSON.parse(dataStorage);
+    if (isProduct(parsedData)) {
+        return parsedData;
+    }
+    return null;
+};
+const renderProduct = (product) => {
+    if (product) {
+        document.write(`<p>Назва товару : ${product.title}</p>
+    <p>Ціна товару : ${product.price}</p>`);
+    }
+};
+renderProduct(getProduct());

@@ -1,18 +1,25 @@
 "use strict";
-// Задача 2. Створити функцію, яка дозволяє знайти або останню цифру числа, або останній символ числа.
-const getError = (message) => {
-    throw new Error(message);
+// Задача 2. Створіть union-тип для трьох типів : car (модель, власник), bus (компанія, кількість місць), airplane (швидкість, тип палива). Створити функцію, яка приймає параметр цього типу і виводить повну інформацію про об'єкт
+const renderTransportInfo = (info, type) => {
+    document.write(`
+        <p><b>Тип транспорту:</b> ${type}</p>
+        <p>${info}</p>
+    `);
 };
-function getLastValue(val) {
-    if (typeof val === 'number')
-        return Math.abs(val % 10);
-    else if (typeof val === 'string')
-        return val[val.length - 1];
-    else {
-        return getError('Невідомий тип');
+const getTransportInfo = (transport) => {
+    switch (transport.type) {
+        case 'Car':
+            renderTransportInfo(`Модель: ${transport.model}<br>Власник: ${transport.owner}`, transport.type);
+            break;
+        case 'Bus':
+            renderTransportInfo(`Компанія: ${transport.company}<br>Кількість місць: ${transport.seatingCapacity}`, transport.type);
+            break;
+        case 'Airplane':
+            renderTransportInfo(`Швидкість: ${transport.speed} км/год<br>Тип палива: ${transport.fuelType}`, transport.type);
+            break;
+        default:
+            const _exhaustiveCheck = transport;
+            throw new Error('Невідомий тип транспорту');
     }
-}
-const numberVal = 654577;
-const stringVal = "8655455";
-document.write(`<p>${getLastValue(numberVal)} : Number</p>`);
-document.write(`<p>${getLastValue(stringVal)} : String</p>`);
+};
+getTransportInfo({ type: 'Car', model: 'Toyota', owner: 'John' });
