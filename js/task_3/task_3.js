@@ -1,6 +1,30 @@
-// 1. Сервіс налаштувань користувача ⚙️
-// Інтерфейс: IUserSettings – визначає структуру налаштувань, які потрібно зберігати (theme: 'dark' | 'light', language: string, notifications: boolean).
-// Клас: SettingsService – містить метод loadSettings(): IUserSettings та saveSettings(settings: IUserSettings). Клас не є самими налаштуваннями, але оперує об'єктами цього типу.
-import SettingsService from "./SettingsService.js";
-const settings = new SettingsService();
-document.body.insertAdjacentHTML("beforeend", settings.printSettings());
+// Задача 3.
+// ========== L (Liskov Substitution Principle) ===============================
+// Сенсори у системі моніторингу (з можливістю вмикати/вимикати):
+// Є базовий клас Sensor із методом getValue() і методами увімкнення/вимкнення.
+// Підклас OfflineSensor повертає помилку замість числового значення, якщо вимкнений.
+// ❌ Порушення LSP — клієнтський код очікує завжди число, але отримує виняток
+// class SensorBad {
+//   private _isOn: boolean = true;
+//   turnOn() {
+//     this._isOn = true;
+//     console.log("✅ Sensor turned ON");
+//   }
+//   turnOff() {
+//     this._isOn = false;
+//     console.log("⚙️ Sensor turned OFF");
+//   }
+//   getValue(): number {
+// навіть якщо сенсор "вимкнений", базовий клас усе одно повертає значення
+//     return Math.random() * 100;
+//   }
+// }
+// class OfflineSensorBad extends SensorBad {
+//   getValue(): number {
+// ❌ Порушення LSP — поведінка змінюється: замість числа — помилка
+//     throw new Error("Sensor offline! Cannot read value.");
+//   }
+// }
+import Sensor from './Sensor.js';
+const sensor = new Sensor();
+console.log(sensor.getValue());

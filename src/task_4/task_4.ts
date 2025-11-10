@@ -1,24 +1,57 @@
-// 6. Моделювання співробітників з різними ролями 👨‍💼
-// Клас: CompanyDirectory
-// Складний тип: Визначення типу Employee.
-// BaseEmployee = { id: number, name: string }
-// ManagerFields = { department: string, subordinates: number }
-// EngineerFields = { stack: string[], level: 'junior' | 'senior' } (Об'єднання для рівня)
-// Об'єднання та Перетин: Employee = (BaseEmployee & ManagerFields) | (BaseEmployee & EngineerFields) (Співробітник має або менеджерські, або інженерні поля)
-// Метод: getEmployeeDetails(employee: Employee)
+// Задача 4. Банківські операції:
+// Є універсальний інтерфейс BankService із усіма можливими операціями.
+// Проте не всі типи рахунків підтримують однакові функції.
+// ❌ Порушення ISP — інтерфейс занадто широкий, усі класи реалізують непотрібні методи.
+// interface BankServiceBad {
+//   deposit(amount: number): void;
+//   withdraw(amount: number): void;
+//   transfer(to: string, amount: number): void;
+//   loanRequest(amount: number): void;
+// }
+// 💰 Клас SavingsAccount підтримує лише внесення, зняття та переказ,
+// але не може оформлювати кредити.
+// class SavingsAccountBad implements BankServiceBad {
+//   deposit(a: number) { console.log(`SavingsAccount: Deposited ${a}`); }
+//   withdraw(a: number) { console.log(`SavingsAccount: Withdrawn ${a}`); }
+//   transfer(to: string, a: number) { console.log(`SavingsAccount: Transferred ${a} to ${to}`); }
+//   loanRequest(a: number) {
+//     throw new Error("❌ Savings account cannot request loans!");
+//   }
+// }
 
-import CompanyDirectory from "./CompanyDirectory.js";
-import Employee from "./Employees.js";
 
+// 🏦 Клас LoanAccount створений лише для кредитів, але змушений реалізовувати інші методи.
+// class LoanAccountBad implements BankServiceBad {
+//   deposit(a: number) {
+//     throw new Error("❌ Loan account cannot accept deposits directly!");
+//   }
+//   withdraw(a: number) {
+//     throw new Error("❌ Loan account cannot withdraw funds directly!");
+//   }
+//   transfer(to: string, a: number) {
+//     throw new Error("❌ Loan account cannot make transfers!");
+//   }
+//   loanRequest(a: number) {
+//     console.log(`LoanAccount: Loan of ${a} requested`);
+//   }
+// }
+// 💳 Клас CheckingAccount (поточний рахунок) не може оформлювати кредити,
+// але все одно змушений реалізувати метод loanRequest().
+// class CheckingAccountBad implements BankServiceBad {
+//   deposit(a: number) { console.log(`CheckingAccount: Deposited ${a}`); }
+//   withdraw(a: number) { console.log(`CheckingAccount: Withdrawn ${a}`); }
+//   transfer(to: string, a: number) { console.log(`CheckingAccount: Transferred ${a} to ${to}`); }
+//   loanRequest(a: number) {
+//     throw new Error("❌ Checking account cannot request loans!");
+//   }
+// }
+import CheckingAccount from "./CheckingAccount.js";
+import LoanAccount from "./LoanAccount.js";
+import SavingsAccount from "./SavingsAccount.js";
 
-const companyDirectory = new CompanyDirectory()
-
-const employee:Employee = {
-    id: 7,
-    name: "Emily Johnson",
-    role: "engineer",
-    stack: ["JavaScript", "React", "Node.js"],
-    level: "senior",
-  } 
-
-companyDirectory.getEmployeeDetails(employee)
+const savingService = new SavingsAccount()
+const checkingService = new CheckingAccount()
+const loanService = new LoanAccount()
+savingService.deposit(200)
+checkingService.withdraw(100)
+loanService.loanRequest(50)

@@ -1,14 +1,19 @@
-// 1. Система управління замовленнями в Інтернет-магазині
-// Клас: Order (Замовлення). Має поля: orderId, customer, items, totalAmount. Містить методи для обчислення загальної суми та зміни статусу.
-// Enum: OrderStatus (СтатусЗамовлення). Визначає можливі стани замовлення: PENDING (Очікує), PROCESSING (Обробляється), SHIPPED (Відправлено), DELIVERED (Доставлено), CANCELLED (Скасовано).
-import Order from './Order.js';
-const mockOrder = {
-    customer: 'Emily Johnson',
-    items: [
-        { item: 'Samsung Smartphone', quantity: 1, price: 300 },
-        { item: 'Phone Case', quantity: 1, price: 20 },
-        { item: 'Screen Protector', quantity: 1, price: 10 },
-    ],
-};
-const order = new Order(mockOrder);
-document.body.insertAdjacentHTML("beforeend", order.printOrderInfo());
+// Задача 2. Побудова графіків:
+// Клас ChartRenderer створює різні типи графіків: лінійний, стовпчиковий, круговий.
+// Якщо потрібно додати новий тип графіка, код доведеться змінювати.
+// ❌ Неправильна реалізація — порушення принципу відкритості/закритості
+// class ChartRendererBad {
+//   renderChart(type: string, data: number[]) {
+//     if (type === "line") {
+//       console.log("Rendering line chart with", data);
+//     } else if (type === "bar") {
+import BarChart from "./BarChart.js";
+import ChartRenderer from "./ChartRenderer.js";
+import LineChart from "./LineChart.js";
+import PieChart from "./PieChart.js";
+const lineChart = new ChartRenderer(new LineChart());
+const barChart = new ChartRenderer(new BarChart());
+const pieChart = new ChartRenderer(new PieChart());
+lineChart.render([54, 12, 8]);
+barChart.render([4, 18, 65]);
+pieChart.render([66, 34, 93]);
