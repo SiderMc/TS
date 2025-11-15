@@ -1,22 +1,10 @@
-// Задача 1.  Завантаження зображень:
-// Клас і завантажує, і стискає, і логує дії.
-// ❌ Неправильна реалізація 
-// class ImageUploaderBad {
-//   uploadImage(filePath: string) {
-//     const compressed = this.compressImage(filePath);
-//     console.log(`Uploading ${compressed} to server...`);
-//     this.logAction(`File ${filePath} uploaded successfully.`);
-//   }
-//   private compressImage(path: string): string {
-//     console.log(`Compressing image: ${path}`);
-//     return `compressed_${path}`;
-//   }
-//   private logAction(message: string) {
-//     const timestamp = new Date().toISOString();
-//     console.log(`[${timestamp}] LOG: ${message}`);
-//   }
-import CompressImage from "./CompressImage.js";
-import Logger from "./LogAction.js";
-import ImageUploader from "./uploadImage.js";
-const uploader = new ImageUploader(new CompressImage(), new Logger());
-uploader.uploadImage("image.jpg");
+"use strict";
+// Задача 1. Отримання випадкового елемента.  Опиши функцію getRandom<T>, яка приймає масив будь-якого типу та повертає випадковий елемент з нього.
+function getRandom(items) {
+    const index = Math.floor(Math.random() * items.length);
+    return items[index];
+}
+const dataNumber = [44, 96, 65, 86, 273, 977];
+const dataString = ["apple", "kiwi", "mango", "banana"];
+console.log(getRandom(dataNumber));
+console.log(getRandom(dataString));
